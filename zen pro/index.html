@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Pop Locker Command Center</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: "Courier New", monospace;
+            background: linear-gradient(270deg, #001a1a, #000, #003333);
+            background-size: 400% 400%;
+            animation: bgMove 2s ease infinite;
+            color: #00ffcc;
+        }
+        
+        @keyframes bgMove {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+        
+        .container {
+            border: 3px solid #00ffcc;
+            box-shadow: 0 0 20px #00ffcc;
+            border-radius: 15px;
+            padding: 30px;
+            margin: 40px;
+        }
+        
+        h1 {
+            text-align: center;
+            letter-spacing: 2px;
+        }
+        
+        .status {
+            font-size: 28px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .panel {
+            background: rgba(0, 255, 204, 0.05);
+            border-radius: 10px;
+            padding: 20px;
+            margin: 15px auto;
+            width: 60%;
+            box-shadow: 0 0 10px #00ffcc;
+        }
+        
+        .panel h3 {
+            text-align: center;
+        }
+        
+        .info p {
+            font-size: 18px;
+            text-align: center;
+        }
+        
+        .result {
+            text-align: center;
+            font-size: 22px;
+            margin-top: 20px;
+        }
+        
+        .locked {
+            color: red;
+        }
+        
+        .unlocked {
+            color: #00ffcc;
+        }
+        
+        .btn-group {
+            text-align: center;
+            margin-top: 20px;
+        }
+        
+        button {
+            background: transparent;
+            border: 2px solid #00ffcc;
+            color: #00ffcc;
+            padding: 10px 20px;
+            cursor: pointer;
+            margin: 5px;
+            border-radius: 5px;
+        }
+        
+        button:hover {
+            background: #00ffcc;
+            color: #000;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <h1>POP LOCKER – COMMAND CENTER</h1>
+        <div class="status">SYSTEM STATUS : <span id="sysStatText" class="locked">LOCKED</span></div>
+
+        <div class="panel">
+            <h3>QR SCANNER STATUS</h3>
+            <p id="qrStatText" style="text-align:center;">Waiting for QR Code...</p>
+        </div>
+
+        <div class="panel info">
+            <h3>LAST AUTHENTICATED USER</h3>
+            <p id="lastName">NAME : Waiting...</p>
+            <p id="lastDept">DEPARTMENT : Waiting...</p>
+        </div>
+
+        <div class="result">ACCESS RESULT : <span id="resText" class="locked">DENIED</span></div>
+    </div>
+
+    <div class="btn-group">
+        <button onclick="scanQR()">SIMULATE QR SCAN</button>
+        <button onclick="window.location.href='log.html'">VIEW LOGS</button>
+    </div>
+
+    <script>
+        function scanQR() {
+            document.getElementById("sysStatText").innerText = "SCANNING...";
+            document.getElementById("qrStatText").innerText = "Processing Encrypted QR...";
+            setTimeout(() => {
+                window.location.href = "verify.html";
+            }, 1500);
+        }
+
+        window.onload = function() {
+            const status = localStorage.getItem("lastStatus");
+            const name = localStorage.getItem("lastName");
+            const dept = localStorage.getItem("lastDept");
+
+            if (status === "GRANTED") {
+                document.getElementById("sysStatText").innerText = "UNLOCKED";
+                document.getElementById("sysStatText").className = "unlocked";
+                document.getElementById("resText").innerText = "GRANTED";
+                document.getElementById("resText").className = "unlocked";
+                document.getElementById("lastName").innerText = "NAME : " + name;
+                document.getElementById("lastDept").innerText = "DEPARTMENT : " + dept;
+            }
+        }
+        window.onload = function() {
+            const status = localStorage.getItem("lastStatus");
+
+            if (status === "GRANTED") {
+                // 1. Keep your existing logic for System Status and Name
+                document.getElementById("sysStatText").innerText = "UNLOCKED";
+                document.getElementById("sysStatText").className = "unlocked";
+                document.getElementById("resText").innerText = "GRANTED";
+                document.getElementById("resText").className = "unlocked";
+
+                // 2. ADD THIS LINE: Update the QR Scanner Status box
+                document.getElementById("qrStatText").innerText = "QR Code Verified Successfully ✅";
+
+                document.getElementById("lastName").innerText = "NAME : " + localStorage.getItem("lastName");
+                document.getElementById("lastDept").innerText = "DEPARTMENT : " + localStorage.getItem("lastDept");
+            }
+        };
+    </script>
+
+</body>
+
+</html>

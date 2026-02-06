@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Security Logs</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: "Courier New", monospace;
+            background: linear-gradient(270deg, #001a1a, #000, #003333);
+            background-size: 400% 400%;
+            animation: bgMove 2s ease infinite;
+            color: #00ffcc;
+        }
+        
+        @keyframes bgMove {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+        
+        .container {
+            border: 3px solid #00ffcc;
+            border-radius: 15px;
+            padding: 30px;
+            margin: 40px;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        
+        th,
+        td {
+            border: 1px solid #00ffcc;
+            padding: 12px;
+            text-align: center;
+        }
+        
+        .GRANTED {
+            color: #00ffcc;
+        }
+        
+        .DENIED {
+            color: red;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1 style="text-align:center;">SECURITY ACCESS LOG</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>DATE & TIME</th>
+                    <th>USER</th>
+                    <th>STATUS</th>
+                    <th>ALERT MESSAGE</th>
+                </tr>
+            </thead>
+            <tbody id="logTableBody"></tbody>
+        </table>
+        <br>
+        <button onclick="window.location.href='index.html'" style="background:transparent; color:#00ffcc; border:1px solid #00ffcc; padding:10px; cursor:pointer;">BACK TO DASHBOARD</button>
+    </div>
+
+    <script>
+        window.onload = function() {
+            const logs = JSON.parse(localStorage.getItem("logs")) || [];
+            const tbody = document.getElementById("logTableBody");
+            if (logs.length === 0) {
+                tbody.innerHTML = "<tr><td colspan='4'>No activity recorded.</td></tr>";
+            } else {
+                logs.reverse().forEach(log => {
+                    tbody.innerHTML += `<tr>
+                    <td>${log.time}</td>
+                    <td>${log.user}</td>
+                    <td class="${log.status}">${log.status}</td>
+                    <td>${log.msg}</td>
+                </tr>`;
+                });
+            }
+        }
+    </script>
+</body>
+
+</html>
