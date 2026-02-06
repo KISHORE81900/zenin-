@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>QR Verification</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: "Courier New", monospace;
+            background-color: #000;
+            color: #00ffcc;
+            text-align: center;
+        }
+        
+        .container {
+            border: 3px solid #00ffcc;
+            box-shadow: 0 0 20px #00ffcc;
+            border-radius: 15px;
+            padding: 30px;
+            margin: 60px auto;
+            width: 60%;
+        }
+        
+        .profile {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            border: 3px solid #00ffcc;
+            margin: 0 auto 20px;
+            font-size: 50px;
+            line-height: 100px;
+        }
+        
+        button {
+            background: transparent;
+            border: 2px solid #00ffcc;
+            color: #00ffcc;
+            padding: 12px 25px;
+            cursor: pointer;
+            border-radius: 8px;
+            margin: 10px;
+        }
+        
+        button:hover {
+            background: #00ffcc;
+            color: #000;
+        }
+        
+        .info p {
+            font-size: 20px;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>QR CODE VERIFICATION</h1>
+        <div class="profile">👤</div>
+        <div class="info">
+            <p><strong>NAME :</strong> <span id="displayName">Jivitesh S.V</span></p>
+            <p><strong>ROLL NO :</strong> <span id="displayRoll">24AD083</span></p>
+            <p><strong>DEPARTMENT :</strong> <span id="displayDept">AI&DS</span></p>
+        </div>
+        <div class="buttons">
+            <button onclick="process(true)">CONFIRM</button>
+            <button onclick="process(false)">CANCEL</button>
+        </div>
+    </div>
+
+    <script>
+        // Step 1: Backend User Database
+        const userDatabase = {
+            "jiv001": {
+                name: "Jivitesh S.V",
+                rollNo: "24AD083",
+                dept: "AI&DS"
+            }
+        };
+
+        // Step 2: The Logic for Clicking Confirm/Cancel
+        function process(isSuccess) {
+            // We use your UID data for the "Backend" process
+            const user = userDatabase["jiv001"];
+
+            if (isSuccess) {
+                // Saving data to LocalStorage (The "Notebook")
+                localStorage.setItem("lastStatus", "GRANTED");
+                localStorage.setItem("lastName", user.name);
+                localStorage.setItem("lastDept", user.dept);
+
+                saveToLog(user.name, "GRANTED", "No Threat Detected");
+                alert("Access Granted! Locker Unlocked.");
+            } else {
+                localStorage.setItem("lastStatus", "DENIED");
+                saveToLog("Unknown", "DENIED", "User Cancelled/Unauthorized");
+                alert("Access Denied!");
+            }
+            // Redirect back to Command Center
+            window.location.href = "index.html";
+        }
+
+        // Step 3: The Logging Worker
+        function saveToLog(user, status, msg) {
+            let logs = JSON.parse(localStorage.getItem("logs")) || [];
+
+            const newEntry = {
+                time: new Date().toLocaleString(),
+                user: user,
+                status: status,
+                msg: msg
+            };
+
+            logs.push(newEntry);
+            localStorage.setItem("logs", JSON.stringify(logs));
+        }
+    </script>
+</body>
+
+</html>
